@@ -1,5 +1,6 @@
 import player
 import pickle
+import os
 class PlayerList:
     _instance = None
 
@@ -15,14 +16,14 @@ class PlayerList:
 
     def save(self):
         try:
-            with open('players.pkl', 'wb') as f:
+            with open(os.path.join(os.path.expanduser('~'), 'players.pkl'), 'wb') as f:
                 pickle.dump(self.players, f)
         except Exception as e:
             print(f"Error saving players: {e}")
 
     def load(self):
         try:
-            with open('players.pkl', 'rb') as f:
+            with open(os.path.join(os.path.expanduser('~'), 'players.pkl'), 'rb') as f:
                 self.players = pickle.load(f)
         except FileNotFoundError:
             pass  # No file yet, start empty
