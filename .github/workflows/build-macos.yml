@@ -24,9 +24,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller
     - name: Build executable
-      run: pyinstaller --onefile main.py
+      run: |
+        if [ "$RUNNER_OS" == "macOS" ]; then
+          pyinstaller main.spec
+        else
+          pyinstaller --onefile main.py
+        fi
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.os }}-executable
-        path: dist/main${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+        path: |
+          ${{ matrix.os == 'macos-latest' && 'dist/main.app' || format('dist/main{0}', matrix.os == 'windows-latest' && '.exe' || '') }}
